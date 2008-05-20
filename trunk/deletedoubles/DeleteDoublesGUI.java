@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import java.awt.GridLayout;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -17,6 +19,8 @@ import com.google.gdata.data.calendar.CalendarEventEntry;
 import com.google.gdata.util.ServiceException;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.JComboBox;
+import javax.swing.JScrollBar;
 
 public class DeleteDoublesGUI extends JFrame {
 
@@ -167,7 +171,7 @@ public class DeleteDoublesGUI extends JFrame {
 	private JTextField getJTextField1() {
 		if (tfPassword == null) {
 			tfPassword = new JTextField();
-			tfPassword.setText("qaysedc1");
+			tfPassword.setText("password");
 		}
 		return tfPassword;
 	}
@@ -217,7 +221,9 @@ public class DeleteDoublesGUI extends JFrame {
 	private JList getJList() {
 		if (jListCalendars == null) {
 			jListCalendars = new JList();
-			jListCalendars.setSize(100, 100);
+			jListCalendars.setSize(100, 50);
+			jListCalendars.setPreferredSize(new Dimension(50,50));
+			
 		}
 		return jListCalendars;
 	}

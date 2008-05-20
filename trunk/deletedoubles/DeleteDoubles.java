@@ -104,7 +104,7 @@ public class DeleteDoubles {
 	}
 	
 	public static void main(String[] args) throws IOException, ServiceException {
-		DeleteDoubles myInstance = new DeleteDoubles("d8schreiber","qaysedc1");
+		DeleteDoubles myInstance = new DeleteDoubles("d8schreiber","password");
 		
 		System.out.println("Coose calendar:");
 		HashMap<String, CalendarEntry> cals = myInstance.getCalendars();
