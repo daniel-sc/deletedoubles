@@ -304,5 +304,11 @@ public class DeleteDoublesGUI extends JFrame {
 		}
 		return jScrollPane;
 	}
+	
+	public static void main(String[] args) throws IOException, ServiceException {
+		DeleteDoublesGUI myInstance = new DeleteDoublesGUI();
+		myInstance.setVisible(true);
+		
+	}
 
 }  //  @jve:decl-index=0:visual-constraint="214,50"
