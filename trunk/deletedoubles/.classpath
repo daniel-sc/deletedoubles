@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="D:/programming/other_jars/simmetrics_jar_v1_6_2_d07_02_07.jar"/>
+	<classpathentry kind="lib" path="D:/programming/gdata/third_party/activation.jar"/>
+	<classpathentry kind="lib" path="D:/programming/gdata/third_party/servlet-api.jar"/>
+	<classpathentry kind="lib" path="D:/programming/gdata/java/lib/gdata-core-1.0.jar"/>
+	<classpathentry kind="lib" path="D:/programming/gdata/java/lib/gdata-calendar-2.0.jar"/>
+	<classpathentry kind="lib" path="D:/programming/gdata/java/lib/gdata-calendar-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="D:/programming/gdata/java/lib/gdata-client-1.0.jar"/>
+	<classpathentry kind="lib" path="D:/programming/gdata/java/lib/gdata-client-meta-1.0.jar"/>
+	<classpathentry kind="lib" path="D:/programming/gdata/java/deps/jsr305.jar"/>
+	<classpathentry kind="lib" path="D:/programming/gdata/java/deps/google-collect-1.0-rc1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
