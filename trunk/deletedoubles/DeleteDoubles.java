@@ -181,4 +181,5 @@ public class DeleteDoubles {
 		myService = new CalendarService("deleteDoubles-0.1");
 		myService.setUserCredentials(user, password);
 	}
+}
 
