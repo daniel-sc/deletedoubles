@@ -81,6 +81,8 @@ public class DeleteDoubles {
 		
 		//loop through all elements and search for doubles;
 		for (CalendarEventEntry e : allEvents) {
+			if( e.getTimes().size()==0 )
+				System.out.println("following event has no time: "+ e.getTitle().getPlainText());
 			if(progressBar!=null) progressBar.setValue(progressBar.getValue()+1);
 			//if element is alreade detected to be a double - continue.
 			if(doubles.containsKey(e.getId())) {
@@ -112,7 +114,9 @@ public class DeleteDoubles {
 				//Could be skipped for  performance reasons: TODO
 				if( Math.abs(entry.getTimes().get(0).getEndTime().getValue()
 				                -e.getTimes().get(0).getEndTime().getValue()) > MAX_TIME_DIFF) continue; 
-			} else if( entry.getTimes().size()>0 || e.getTimes().size()>0 ) continue; //if one has a time and the other not, they are not equal.
+			} else {
+				if( entry.getTimes().size()>0 || e.getTimes().size()>0 ) continue; //if one has a time and the other not, they are not equal.
+			}
 			if(entry.getId()==e.getId()) continue; //better: later for performance
 			map.put(entry.getId(), entry);
 			//System.out.println("found double!");
@@ -177,27 +181,6 @@ public class DeleteDoubles {
 	DeleteDoubles(String user, String password) throws IOException, ServiceException {
 		myService = new CalendarService("deleteDoubles-0.1");
 		myService.setUserCredentials(user, password);
-	}
-	/**
-	 * Compares strings a and b.
-	 * @param a
-	 * @param b
-	 * @return the mean distance between the strings. 0=equal
-	 */
-	public double similarity(String a, String b) {
-		double result = 0;
-		//make a the longer string:
-		if(a.length() < b.length()) {
-			String c = a;
-			a = b;
-			b = c;
-		}
-		
-		for(int i=0; i<b.length(); i++) {
-			result += Math.abs(a.charAt(i)-b.charAt(i));
-		}
-		
-		return result/(double)b.length();
 	}
 }
 
