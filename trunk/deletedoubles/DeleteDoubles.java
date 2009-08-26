@@ -50,7 +50,6 @@ public class DeleteDoubles {
 		
 		System.out.println("kalendertitel:"+myFeed.getTitle().getPlainText());
 		System.out.println("Total results: " + myFeed.getTotalResults()); 
-		System.out.println("items per page: " + myFeed.getItemsPerPage());
 		
 		int currStart = 1;
 		int total = myFeed.getTotalResults();
@@ -81,8 +80,8 @@ public class DeleteDoubles {
 		
 		//loop through all elements and search for doubles;
 		for (CalendarEventEntry e : allEvents) {
-			if( e.getTimes().size()==0 )
-				System.out.println("following event has no time: "+ e.getTitle().getPlainText());
+//			if( e.getTimes().size()==0 )
+//				System.out.println("following event has no time: "+ e.getTitle().getPlainText());
 			if(progressBar!=null) progressBar.setValue(progressBar.getValue()+1);
 			//if element is alreade detected to be a double - continue.
 			if(doubles.containsKey(e.getId())) {
@@ -182,5 +181,4 @@ public class DeleteDoubles {
 		myService = new CalendarService("deleteDoubles-0.1");
 		myService.setUserCredentials(user, password);
 	}
-}
 
