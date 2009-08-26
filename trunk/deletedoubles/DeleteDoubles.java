@@ -16,14 +16,31 @@ import com.google.gdata.data.calendar.CalendarEventFeed;
 import com.google.gdata.data.calendar.CalendarFeed;
 import com.google.gdata.util.ServiceException;
 
+import uk.ac.shef.wit.simmetrics.similaritymetrics.Levenshtein;
+
 public class DeleteDoubles {
-	
+	/**
+	 * maximum difference of start and end time for matching events.
+	 */
+	private static final int MAX_TIME_DIFF = 362000; //~6 minutes
 	/**
 	 * google-service - used for all communication.
 	 */
 	CalendarService myService;
 	JProgressBar progressBar = null;
 	
+	/**
+	 * instance for getting string-similarities
+	 */
+	Levenshtein distance = new Levenshtein();
+	
+	/**
+	 * Finds all doubles of the calendar 'calID'.
+	 * @param calID
+	 * @return a HashMap (eventId -> event) of doubles.
+	 * @throws IOException
+	 * @throws ServiceException
+	 */
 	public HashMap<String, CalendarEventEntry> findDoubles(String calID) throws IOException, ServiceException {
 		if(progressBar != null) progressBar.setIndeterminate(true);
 		
@@ -76,25 +93,32 @@ public class DeleteDoubles {
 
 		return doubles;
 	}
-	
+	/**
+	 * Testet ob der Termin 'e' ein Dublikat in 'allEvents' hat. 
+	 * Checks wether the Levensthein distance of the titles is <= 2
+	 * and wether the start and end times are within MAX_TIME_DIFF.
+	 * @return eine Map (dublikat.getId() -> dublikat) mit allen
+	 *  Dublikaten des Events 'e'. M�glicherweise leer!
+	 */
 	private Map<? extends String, ? extends CalendarEventEntry> findDoubles(CalendarEventEntry e, HashSet<CalendarEventEntry> allEvents) {
 		Map<String, CalendarEventEntry> map = new HashMap<String, CalendarEventEntry>();
-		String regex = Pattern.quote(e.getTitle().getPlainText());
 
 		for (CalendarEventEntry entry : allEvents) {
-			//bedingungen für gleichheit:
-			//TODO: handle umlaute:
-			if(! (entry.getTitle().getPlainText().matches(regex)) ) continue;
+			//check for similarity:
+			if( distance.getUnNormalisedSimilarity(entry.getTitle().getPlainText(), e.getTitle().getPlainText()) > 2 ) continue;
 			if(entry.getTimes().size()>0 && e.getTimes().size()>0) {
 				if( Math.abs(entry.getTimes().get(0).getStartTime().getValue()
-						        -e.getTimes().get(0).getStartTime().getValue()) > 3620000) continue;
-				//überflüssig?
+						        -e.getTimes().get(0).getStartTime().getValue()) > MAX_TIME_DIFF) continue;
+				//Could be skipped for  performance reasons: TODO
 				if( Math.abs(entry.getTimes().get(0).getEndTime().getValue()
-				        -e.getTimes().get(0).getEndTime().getValue()) > 3620000) continue; 
+				                -e.getTimes().get(0).getEndTime().getValue()) > MAX_TIME_DIFF) continue; 
 			} else if( entry.getTimes().size()>0 || e.getTimes().size()>0 ) continue; //if one has a time and the other not, they are not equal.
 			if(entry.getId()==e.getId()) continue; //better: later for performance
 			map.put(entry.getId(), entry);
 			//System.out.println("found double!");
+			//System.out.println(entry.getTitle().getPlainText()+" and "+ e.getTitle().getPlainText() +" has similarity: "+
+			//		distance.getUnNormalisedSimilarity(entry.getTitle().getPlainText(), e.getTitle().getPlainText()));
+			
 		}
 		return map;
 	}
@@ -103,6 +127,12 @@ public class DeleteDoubles {
 		progressBar = pb;
 	}
 	
+	/**
+	 * Führt das Programm als Konsolenprogramm aus
+	 * @param args
+	 * @throws IOException
+	 * @throws ServiceException
+	 */
 	public static void main(String[] args) throws IOException, ServiceException {
 		DeleteDoubles myInstance = new DeleteDoubles("d8schreiber","password");
 		
@@ -147,6 +177,27 @@ public class DeleteDoubles {
 	DeleteDoubles(String user, String password) throws IOException, ServiceException {
 		myService = new CalendarService("deleteDoubles-0.1");
 		myService.setUserCredentials(user, password);
+	}
+	/**
+	 * Compares strings a and b.
+	 * @param a
+	 * @param b
+	 * @return the mean distance between the strings. 0=equal
+	 */
+	public double similarity(String a, String b) {
+		double result = 0;
+		//make a the longer string:
+		if(a.length() < b.length()) {
+			String c = a;
+			a = b;
+			b = c;
+		}
+		
+		for(int i=0; i<b.length(); i++) {
+			result += Math.abs(a.charAt(i)-b.charAt(i));
+		}
+		
+		return result/(double)b.length();
 	}
 }
 
